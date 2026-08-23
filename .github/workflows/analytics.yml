@@ -1,0 +1,13 @@
+name: Analytics
+on:
+  schedule:
+    - cron: "10 2 * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  insights:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Insights collection remains inactive until Meta secrets and media IDs exist."
