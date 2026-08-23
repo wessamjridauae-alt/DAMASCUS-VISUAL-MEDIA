@@ -1,0 +1,52 @@
+name: Daily content
+on:
+  schedule:
+    - cron: "17 6 * * *"
+    - cron: "43 12 * * *"
+    - cron: "27 17 * * *"
+  workflow_dispatch:
+    inputs:
+      slot:
+        description: "A, B or C"
+        required: true
+        default: "A"
+      dry_run:
+        description: "Keep true until APPROVE AUTOPUBLISH"
+        required: true
+        default: "true"
+concurrency:
+  group: damascus-content-${{ github.event.inputs.slot || github.run_id }}
+  cancel-in-progress: false
+permissions:
+  contents: read
+jobs:
+  content:
+    runs-on: ubuntu-latest
+    env:
+      AUTOPUBLISH_ENABLED: "false"
+      META_GRAPH_API_VERSION: ${{ vars.META_GRAPH_API_VERSION }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12", cache: pip}
+      - run: pip install -r requirements.txt
+      - name: Resolve slot
+        id: slot
+        shell: bash
+        run: |
+          SLOT="${{ github.event.inputs.slot }}"
+          if [ -z "$SLOT" ]; then
+            case "${{ github.event.schedule }}" in
+              "17 6 * * *") SLOT=A ;;
+              "43 12 * * *") SLOT=B ;;
+              *) SLOT=C ;;
+            esac
+          fi
+          echo "slot=$SLOT" >> "$GITHUB_OUTPUT"
+      - run: python scripts/pipeline.py --slot "${{ steps.slot.outputs.slot }}"
+      - run: pytest -q
+      - uses: actions/upload-artifact@v4
+        with:
+          name: preview-${{ steps.slot.outputs.slot }}-${{ github.run_id }}
+          path: output/
+          retention-days: 14
