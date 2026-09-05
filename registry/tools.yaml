@@ -23,6 +23,39 @@ tools:
     runtime: local-now
     license: HPND
     use: [text, masks, image-prep, procedural-graphics]
+
+  - name: LivePortrait
+    repo: https://github.com/KlingAIResearch/LivePortrait
+    category: human-animation
+    runtime: cpu-slow-or-gpu
+    use: [portrait-animation, expression-transfer, head-motion, identity-preserving-closeups]
+    notes: best for face/head/upper-body, not full-body walking
+  - name: LivePortrait-ONNXRun
+    repo: https://github.com/hpc203/liveportrait-onnxrun
+    category: human-animation-cpu
+    runtime: cpu-candidate
+    use: [onnx-portrait-animation, python-inference, cplusplus-inference]
+    notes: candidate for CPU execution; requires onnxruntime plus model weights
+  - name: MimicMotion
+    repo: https://github.com/tencent/MimicMotion
+    category: human-animation-fullbody
+    runtime: gpu-required
+    use: [pose-driven-full-body-animation, long-human-motion, image-to-video]
+    notes: high quality; published examples require substantial VRAM; not practical on current CPU-only runtime
+  - name: MusePose
+    repo: https://github.com/TMElyralab/MusePose
+    category: human-animation-fullbody
+    runtime: gpu-required
+    license: MIT-code; model non-commercial research only
+    use: [pose-guided-character-animation, dance, full-body-motion]
+    notes: model license limits commercial publishing; do not use for WJ1.SY commercial work without cleared weights
+  - name: Moore-AnimateAnyone
+    repo: https://github.com/MooreThreads/Moore-AnimateAnyone
+    category: human-animation-fullbody
+    runtime: gpu-required
+    use: [pose-driven-human-animation, reference-image-animation]
+    notes: evaluate current code/model licenses before use
+
   - name: ComfyUI
     repo: https://github.com/Comfy-Org/ComfyUI
     category: generative-orchestration
@@ -78,6 +111,15 @@ tools:
     runtime: cpu-capable
     license: Apache-2.0
     use: [face-landmarks, pose, tracking, alignment]
+
+runtime_truth:
+  current_environment:
+    ram_gb: 5.8
+    cuda: false
+    torch: cpu-only
+    terminal_internet: false
+    onnxruntime: missing
+  rule: "Never claim a generative model is locally runnable until dependencies, model weights and a real inference test pass."
 
 policy:
   rule: "Registry entry means technically interesting, not automatically commercially cleared. Check code + model + asset licenses before publication."
