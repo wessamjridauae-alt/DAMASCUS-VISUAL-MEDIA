@@ -41,20 +41,27 @@ tools:
     category: human-animation-fullbody
     runtime: gpu-required
     use: [pose-driven-full-body-animation, long-human-motion, image-to-video]
-    notes: high quality; published examples require substantial VRAM; not practical on current CPU-only runtime
+    notes: primary full-body candidate for WJ1.SY once a suitable GPU runtime is available
   - name: MusePose
     repo: https://github.com/TMElyralab/MusePose
     category: human-animation-fullbody
     runtime: gpu-required
     license: MIT-code; model non-commercial research only
     use: [pose-guided-character-animation, dance, full-body-motion]
-    notes: model license limits commercial publishing; do not use for WJ1.SY commercial work without cleared weights
+    notes: do not use model weights for commercial publishing without cleared license
   - name: Moore-AnimateAnyone
     repo: https://github.com/MooreThreads/Moore-AnimateAnyone
     category: human-animation-fullbody
     runtime: gpu-required
     use: [pose-driven-human-animation, reference-image-animation]
-    notes: evaluate current code/model licenses before use
+    notes: secondary research candidate; verify current code/model licenses before use
+  - name: DWPose
+    repo: https://github.com/IDEA-Research/DWPose
+    category: pose-estimation
+    runtime: cpu-or-gpu
+    license: Apache-2.0
+    use: [whole-body-pose, pose-extraction, driving-video-preprocessing, control-signals]
+    notes: preferred pose extraction layer for full-body animation pipelines
 
   - name: ComfyUI
     repo: https://github.com/Comfy-Org/ComfyUI
@@ -81,24 +88,14 @@ tools:
     runtime: gpu-external
     license: check-current-repo-and-model
     use: [text-to-video, image-to-video, fast-generation]
-  - name: Real-ESRGAN
-    repo: https://github.com/xinntao/Real-ESRGAN
-    category: restoration
-    runtime: gpu-preferred
-    license: BSD-3-Clause
-    use: [upscale, denoise, restoration]
-  - name: Practical-RIFE
-    repo: https://github.com/hzwer/Practical-RIFE
-    category: motion
-    runtime: gpu-preferred
-    license: MIT
-    use: [frame-interpolation, slow-motion, fps-conversion]
-  - name: Whisper
-    repo: https://github.com/openai/whisper
-    category: speech
+
+  - name: RobustVideoMatting
+    repo: https://github.com/PeterL1n/RobustVideoMatting
+    category: matting
     runtime: cpu-or-gpu
-    license: MIT
-    use: [transcription, subtitle-timing]
+    license: GPL-3.0
+    use: [person-cutout, alpha-matte, foreground-extraction, compositing]
+    notes: supports PyTorch/TensorFlow/ONNX/CoreML implementations
   - name: SAM 2
     repo: https://github.com/facebookresearch/sam2
     category: segmentation
@@ -112,6 +109,37 @@ tools:
     license: Apache-2.0
     use: [face-landmarks, pose, tracking, alignment]
 
+  - name: Real-ESRGAN
+    repo: https://github.com/xinntao/Real-ESRGAN
+    category: restoration
+    runtime: gpu-preferred
+    license: BSD-3-Clause
+    use: [upscale, denoise, restoration]
+  - name: GFPGAN
+    repo: https://github.com/TencentARC/GFPGAN
+    category: face-restoration
+    runtime: gpu-preferred
+    license: verify-current-repo-license
+    use: [face-restoration, identity-recovery, post-generation-cleanup]
+  - name: CodeFormer
+    repo: https://github.com/sczhou/CodeFormer
+    category: face-restoration
+    runtime: gpu-preferred
+    license: verify-current-repo-license
+    use: [face-restoration, fidelity-quality-control, generated-face-cleanup]
+  - name: Practical-RIFE
+    repo: https://github.com/hzwer/Practical-RIFE
+    category: motion
+    runtime: gpu-preferred
+    license: MIT
+    use: [frame-interpolation, slow-motion, fps-conversion]
+  - name: Whisper
+    repo: https://github.com/openai/whisper
+    category: speech
+    runtime: cpu-or-gpu
+    license: MIT
+    use: [transcription, subtitle-timing]
+
 runtime_truth:
   current_environment:
     ram_gb: 5.8
@@ -120,6 +148,12 @@ runtime_truth:
     terminal_internet: false
     onnxruntime: missing
   rule: "Never claim a generative model is locally runnable until dependencies, model weights and a real inference test pass."
+
+production_priority:
+  cpu_now: [FFmpeg, OpenCV, MoviePy, Pillow, MediaPipe]
+  cpu_next_when_dependencies_available: [LivePortrait-ONNXRun, DWPose, RobustVideoMatting]
+  gpu_primary: [MimicMotion, DWPose, Real-ESRGAN, CodeFormer, Practical-RIFE]
+  gpu_secondary: [Wan2.2, LTX-Video, CogVideoX, SAM-2, LivePortrait]
 
 policy:
   rule: "Registry entry means technically interesting, not automatically commercially cleared. Check code + model + asset licenses before publication."
