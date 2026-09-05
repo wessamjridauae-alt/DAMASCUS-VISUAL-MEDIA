@@ -1,0 +1,24 @@
+# WESSAM LOCAL STACK — pinned source references
+# All tools below are intended to be installed and run locally.
+
+awesome-selfhosted:
+  repo: https://github.com/awesome-selfhosted/awesome-selfhosted.git
+  branch: master
+  role: catalog-only
+
+llama.cpp:
+  repo: https://github.com/ggml-org/llama.cpp.git
+  branch: master
+  verified_head_2026-09-05: 6a1a922d269908a29cbd4b49c27e6a8e7fd10fae
+  role: local-llm-runtime
+
+AutoGPT:
+  repo: https://github.com/Significant-Gravitas/AutoGPT.git
+  branch: master
+  role: local-agent-runtime
+  local_llm_endpoint: http://127.0.0.1:8080/v1
+
+policy:
+  external_paid_apis: forbidden
+  cloud_model_fallback: forbidden
+  runtime_mode: local-only
