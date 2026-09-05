@@ -1,0 +1,83 @@
+tools:
+  - name: FFmpeg
+    repo: https://github.com/FFmpeg/FFmpeg
+    category: edit-render
+    runtime: local-now
+    license: LGPL-2.1-or-later / GPL components vary by build
+    use: [encode, crop, grade, speed-ramp, transitions, overlays, stabilization, silent-reels]
+  - name: OpenCV
+    repo: https://github.com/opencv/opencv
+    category: vision
+    runtime: local-now
+    license: Apache-2.0
+    use: [tracking, alignment, optical-flow, masks, homography, composition-lock]
+  - name: MoviePy
+    repo: https://github.com/Zulko/moviepy
+    category: edit-render
+    runtime: local-now
+    license: MIT
+    use: [timeline, compositing, rapid-prototyping]
+  - name: Pillow
+    repo: https://github.com/python-pillow/Pillow
+    category: graphics
+    runtime: local-now
+    license: HPND
+    use: [text, masks, image-prep, procedural-graphics]
+  - name: ComfyUI
+    repo: https://github.com/Comfy-Org/ComfyUI
+    category: generative-orchestration
+    runtime: gpu-external
+    license: GPL-3.0
+    use: [image-generation, video-workflows, control, node-pipelines]
+  - name: Wan2.2
+    repo: https://github.com/Wan-Video/Wan2.2
+    category: ai-video
+    runtime: gpu-external
+    license: Apache-2.0-code
+    use: [text-to-video, image-to-video]
+    notes: verify individual model-weight license before commercial publication
+  - name: CogVideoX
+    repo: https://github.com/zai-org/CogVideo
+    category: ai-video
+    runtime: gpu-external
+    license: Apache-2.0-code; model-specific
+    use: [text-to-video, image-to-video]
+  - name: LTX-Video
+    repo: https://github.com/Lightricks/LTX-Video
+    category: ai-video
+    runtime: gpu-external
+    license: check-current-repo-and-model
+    use: [text-to-video, image-to-video, fast-generation]
+  - name: Real-ESRGAN
+    repo: https://github.com/xinntao/Real-ESRGAN
+    category: restoration
+    runtime: gpu-preferred
+    license: BSD-3-Clause
+    use: [upscale, denoise, restoration]
+  - name: Practical-RIFE
+    repo: https://github.com/hzwer/Practical-RIFE
+    category: motion
+    runtime: gpu-preferred
+    license: MIT
+    use: [frame-interpolation, slow-motion, fps-conversion]
+  - name: Whisper
+    repo: https://github.com/openai/whisper
+    category: speech
+    runtime: cpu-or-gpu
+    license: MIT
+    use: [transcription, subtitle-timing]
+  - name: SAM 2
+    repo: https://github.com/facebookresearch/sam2
+    category: segmentation
+    runtime: gpu-preferred
+    license: Apache-2.0
+    use: [object-masks, video-segmentation, subject-isolation]
+  - name: MediaPipe
+    repo: https://github.com/google-ai-edge/mediapipe
+    category: tracking
+    runtime: cpu-capable
+    license: Apache-2.0
+    use: [face-landmarks, pose, tracking, alignment]
+
+policy:
+  rule: "Registry entry means technically interesting, not automatically commercially cleared. Check code + model + asset licenses before publication."
